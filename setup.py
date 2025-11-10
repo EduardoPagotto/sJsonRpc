@@ -1,26 +1,30 @@
 #!./venv/bin/python3
 '''
 Created on 20220926
-Update on 20220926
+Update on 20251110
 @author: Eduardo Pagotto
 '''
 
 from setuptools import setup, find_packages
 
-from sJsonRpc.__init__ import __version__ as VERSION
+import os
+import sys
+sys.path.append(os.path.join(os.getcwd(), './src'))
 
-PACKAGE = "sJsonRpc"
+from sjsonrpc import __version__ as VERSION
+
+PACKAGE = "sjsonrpc"
 
 # listar os packages
 #python -c "from setuptools import setup, find_packages; print(find_packages())"
 
 setup(
-    name="sJsonRpc",
+    name="sjsonrpc",
     version=VERSION,
     author="Eduardo Pagotto",
     author_email="edupagotto@gmail.com",
-    description="RPC Classes",
-    long_description="Classes to build simplest RPC's",#long_description,
+    description="Json RPC Wrapper",
+    long_description="Classes to build simple RPC's",
     long_description_content_type="text/markdown",
     url="https://github.com/EduardoPagotto/sJsonRpc.git",
     packages=find_packages(),

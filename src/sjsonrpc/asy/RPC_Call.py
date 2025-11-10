@@ -1,16 +1,15 @@
 '''
 Created on 20190823
-Update on 20220926
+Update on 20251110
 @author: Eduardo Pagotto
 '''
 
 import threading
 import random
 
-from zencomm import __json_rpc_version__ as json_rpc_version
-from zencomm import ExceptZen
-
-from .ConnectionControl import ConnectionControl
+from sjsonrpc import __json_rpc_version__ as json_rpc_version
+from sjsonrpc import ExceptionJsonRPC
+from sjsonrpc.asy.ConnectionControl import ConnectionControl
 
 class RPC_Call(object):
     """[Midlleware json Protocol]
@@ -76,11 +75,11 @@ class RPC_Call(object):
         """
         if reg['id'] == self.serial:
             if 'error' in reg:
-                raise ExceptZen(reg['error']['message'], reg['error']['code'])
+                raise ExceptionJsonRPC(reg['error']['message'], reg['error']['code'])
 
             return reg['result']
 
-        raise ExceptZen(f'Parse error, id {reg["id"]} should be {self.serial}', -32700)
+        raise ExceptionJsonRPC(f'Parse error, id {reg["id"]} should be {self.serial}', -32700)
 
     async def __call__(self, *args, **kargs) -> dict:
         """[Call RPC on connection and get result]

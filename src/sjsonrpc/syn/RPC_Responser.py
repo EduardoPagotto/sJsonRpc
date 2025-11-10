@@ -4,7 +4,8 @@ Update on 20251110
 @author: Eduardo Pagotto
 '''
 
-from zencomm import ExceptZen, __json_rpc_version__ as json_rpc_version
+from sjsonrpc import __json_rpc_version__ as json_rpc_version
+from sjsonrpc import ExceptionJsonRPC
 
 class RPC_Responser(object):
     """[Connection thread with server RPC ]
@@ -33,7 +34,7 @@ class RPC_Responser(object):
         except TypeError as exp1:
             return {'jsonrpc': json_rpc_version, 'error': {'code': -32602, 'message': 'Invalid params: '+ str(exp1)}, 'id': serial}
 
-        except ExceptZen as exp2:
+        except ExceptionJsonRPC as exp2:
             tot = len(exp2.args)
             if tot == 0:
                 return {'jsonrpc': json_rpc_version, 'error': {'code': -32000, 'message': 'server error: generic RPC exception'}, 'id': serial}

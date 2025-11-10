@@ -1,12 +1,12 @@
 # sJsonRpc
-Some classes to do JsonRPC in Python
+Wrapper Python classe with json
 
-Class Client:
+## Client
 - ConnectionControl
 - ProxyObject
 - RPC_Call
 
-Class Server
+# Server
 - RPC_Responser.py
 
 # Install
