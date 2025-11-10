@@ -1,11 +1,10 @@
 '''
 Created on 20190824
-Update on 20220926
+Update on 20251110
 @author: Eduardo Pagotto
 '''
 
-from .__init__ import __json_rpc_version__ as json_rpc_version
-from .__init__ import ExceptionRPC
+from zencomm import ExceptZen, __json_rpc_version__ as json_rpc_version
 
 class RPC_Responser(object):
     """[Connection thread with server RPC ]
@@ -18,16 +17,9 @@ class RPC_Responser(object):
         Args:
             target (object): [Method Name to run in RPC Server]
         """
-        self.target : object= target
+        self.target : object = target
 
-    def call(self, reg : dict) -> dict:
-        """[Execute method local with paramters in dict]
-        Args:
-            reg (dict): [json Protocol data received (id, method, parameters)]
-        Returns:
-            dict: [Resulto of method in json Protocol]
-        """
-
+    def encode_exec_decode(self, reg: dict) -> dict:
         serial : int = reg['id']
         metodo : str = reg['method']
 
@@ -41,7 +33,7 @@ class RPC_Responser(object):
         except TypeError as exp1:
             return {'jsonrpc': json_rpc_version, 'error': {'code': -32602, 'message': 'Invalid params: '+ str(exp1)}, 'id': serial}
 
-        except ExceptionRPC as exp2:
+        except ExceptZen as exp2:
             tot = len(exp2.args)
             if tot == 0:
                 return {'jsonrpc': json_rpc_version, 'error': {'code': -32000, 'message': 'server error: generic RPC exception'}, 'id': serial}

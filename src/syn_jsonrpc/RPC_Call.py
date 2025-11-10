@@ -7,8 +7,9 @@ Update on 20220926
 import threading
 import random
 
-from .__init__ import __json_rpc_version__ as json_rpc_version
-from .__init__ import ExceptionRPC
+from zencomm import __json_rpc_version__ as json_rpc_version
+from zencomm import ExceptZen
+
 from .ConnectionControl import ConnectionControl
 
 class RPC_Call(object):
@@ -75,11 +76,11 @@ class RPC_Call(object):
         """
         if reg['id'] == self.serial:
             if 'error' in reg:
-                raise ExceptionRPC(reg['error']['message'], reg['error']['code'])
+                raise ExceptZen(reg['error']['message'], reg['error']['code'])
 
             return reg['result']
 
-        raise ExceptionRPC('Parse error, id {0} should be {1}'.format(reg['id'], self.serial), -32700)
+        raise ExceptZen(f'Parse error, id {reg["id"]} should be {self.serial}', -32700)
 
     def __call__(self, *args, **kargs) -> dict:
         """[Call RPC on connection and get result]
