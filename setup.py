@@ -16,6 +16,9 @@ PACKAGE = "sjsonrpc"
 # listar os packages
 #python -c "from setuptools import setup, find_packages; print(find_packages())"
 
+# Classifiers
+# https://pypi.org/classifiers/
+
 def read(fname):
     return codecs.open(os.path.join(os.path.dirname(__file__), fname)).read()
 
