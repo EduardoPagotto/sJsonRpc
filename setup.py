@@ -5,11 +5,9 @@ Update on 20251110
 @author: Eduardo Pagotto
 '''
 
-from setuptools import setup, find_packages
-
 import os
-import sys
-sys.path.append(os.path.join(os.getcwd(), './src'))
+import codecs
+from setuptools import setup, find_packages
 
 from sjsonrpc import __version__ as VERSION
 
@@ -18,20 +16,32 @@ PACKAGE = "sjsonrpc"
 # listar os packages
 #python -c "from setuptools import setup, find_packages; print(find_packages())"
 
+def read(fname):
+    return codecs.open(os.path.join(os.path.dirname(__file__), fname)).read()
+
 setup(
     name="sjsonrpc",
     version=VERSION,
     author="Eduardo Pagotto",
     author_email="edupagotto@gmail.com",
-    description="Json RPC Wrapper",
-    long_description="Classes to build simple RPC's",
+    description="Json RPC Python Wrapper class",
+    long_description=read('README.md'),
     long_description_content_type="text/markdown",
     url="https://github.com/EduardoPagotto/sJsonRpc.git",
-    packages=find_packages(),
-    license="MIT",
+    packages=find_packages(
+        where=".",
+        exclude=["tests.*", "tests"]
+    ),
+    platforms='any',
+    include_package_data=True,
+    license=read('LICENSE'),
     classifiers=[
-        "Programming Language :: Python :: 3",
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Developers",
+        "Topic :: File Formats :: JSON",
+        "Topic :: Software Development :: Libraries",
         "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3",
         "Operating System :: OS Independent"
     ],
     install_requires=['setuptools',
