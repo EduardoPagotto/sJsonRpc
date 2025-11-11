@@ -1,5 +1,5 @@
 # sJsonRpc
-Wrapper Python classe with json
+Wrapper RPC Json Python with class
 
 ## Client
 - ConnectionControl
