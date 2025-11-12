@@ -1,13 +1,12 @@
-# sJsonRpc
-Wrapper RPC Json Python with class
+# Simple Json RPC Wrapper (sJsonRpc)
+Just a simple Json RPC Python wrapper class
 
-## Client
-- ConnectionControl
-- ProxyObject
-- RPC_Call
+## Client class
+New connections kind just overload "ConnectionControl.py" with any protocol/socket<p>
+In ./tests/ has a several examples using zencomm(simple binary socket protocol)
 
-## Server
-- RPC_Responser.py
+## Server class
+New server just overload "RPC_Responser.py" using any kind of socket/protocol
 
 ## Setup env
 ```bash
