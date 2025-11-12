@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 '''
 Created on 20241001
-Update on 20251111
+Update on 20251112
 @author: Eduardo Pagotto
 '''
 
 import asyncio
 import json
+import logging
 import os
 import socket
 import sys
 import threading
 
 from zencomm.asy.protocol import Protocol
-from zencomm.header import ProtocolCode
-from zencomm.asy import get_async_logger
+from zencomm import ProtocolCode, setup_queue_logging
 from zencomm.asy.socket import SocketServer
 
 sys.path.append(os.path.join(os.getcwd(), '.'))
@@ -23,7 +23,8 @@ from sjsonrpc.asy import RPC_Responser
 
 URL = 'unix:///tmp/teste0.sock'
 
-logger = get_async_logger('zen')
+logger_listern = setup_queue_logging('./log/async_server.log')
+logger = logging.getLogger('async_server')
 
 class Responser(RPC_Responser):
     def __init__(self, target: object):
@@ -40,7 +41,7 @@ class Responser(RPC_Responser):
             protocol = Protocol(args[0], args[1])
 
         except Exception as exp:
-            await logger.critical('fail creating connection: %s', str(exp))
+            logger.critical('fail creating connection: %s', str(exp))
             return
 
         count_to = 0
@@ -66,7 +67,7 @@ class Responser(RPC_Responser):
 
         await protocol.close()
 
-        await logger.info(f'{t_name} finnished')
+        logger.info(f'{t_name} finnished')
 
 
 class ServerRPC(object):
@@ -84,18 +85,17 @@ class ServerRPC(object):
         return self.nome
 
     async def teste(self, nome):
-        await logger.info(f"Methodo TESTE recebido com {nome}")
+        logger.info(f"Methodo TESTE recebido com {nome}")
         return "MSG_RECEBIDA_OK!!!!"
 
 
 async def main():
-    await logger.info("server start.")
+    logger.info("server start.")
 
     server = ServerRPC(URL)
     await server.execute()
 
-    await logger.info("server stop.")
-    await logger.shutdown()
+    logger.info("server stop.")
 
 if __name__ == "__main__":
     asyncio.run(main())

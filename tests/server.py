@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 '''
 Created on 20170119
-Update on 20251111
+Update on 20251112
 @author: Eduardo Pagotto
 '''
 
 import json
+import logging
 import socket
 import threading
 import time
@@ -14,9 +15,9 @@ from urllib.parse import urlparse
 from zencomm.header import ProtocolCode
 from zencomm.syn.protocol import Protocol
 from zencomm.utils import GracefulKiller
-from zencomm.syn import get_logger
 from zencomm.syn.server import ServiceServer
 from zencomm.syn.socket import socket_server
+from zencomm import setup_queue_logging
 
 import os
 import sys
@@ -24,7 +25,8 @@ sys.path.append(os.path.join(os.getcwd(), '.'))
 
 from sjsonrpc.syn import RPC_Responser
 
-logger = get_logger('zen')
+logger_listern = setup_queue_logging('./log/server.log')
+logger = logging.getLogger('server')
 
 class Responser(RPC_Responser):
     def __init__(self, target: object):

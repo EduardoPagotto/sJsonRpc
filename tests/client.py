@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 '''
 Created on 20170119
-Update on 20251111
+Update on 20251112
 @author: Eduardo Pagotto
 '''
 
 import json
+import logging
 from typing import Any
 from urllib.parse import urlparse
 
-from zencomm.header import ProtocolCode
-from zencomm.syn import get_logger
+from zencomm import ProtocolCode, setup_queue_logging
 from zencomm.syn.protocol import Protocol
 from zencomm.syn.socket import socket_client
 
@@ -20,7 +20,8 @@ sys.path.append(os.path.join(os.getcwd(), '.'))
 
 from sjsonrpc.syn import ConnectionControl, ProxyObject
 
-logger = get_logger('zen_client')
+logger_listern = setup_queue_logging('./log/client.log')
+logger = logging.getLogger('client')
 
 class ConnectionRemote(ConnectionControl):
     def __init__(self, url):

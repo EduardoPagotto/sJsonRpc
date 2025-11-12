@@ -1,6 +1,6 @@
 '''
 Created on 20190823
-Update on 20251110
+Update on 20251112
 @author: Eduardo Pagotto
 '''
 
@@ -8,7 +8,7 @@ import threading
 import random
 
 from sjsonrpc import __json_rpc_version__ as json_rpc_version
-from sjsonrpc import ExceptionJsonRPC
+from sjsonrpc.exceptjsonrpc import ExceptionJsonRPC
 from sjsonrpc.asy.ConnectionControl import ConnectionControl
 
 class RPC_Call(object):

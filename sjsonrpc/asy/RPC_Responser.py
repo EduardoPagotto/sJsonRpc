@@ -1,11 +1,11 @@
 '''
 Created on 20190824
-Update on 20251110
+Update on 20251112
 @author: Eduardo Pagotto
 '''
 
 from sjsonrpc import __json_rpc_version__ as json_rpc_version
-from sjsonrpc import ExceptionJsonRPC
+from sjsonrpc.exceptjsonrpc import ExceptionJsonRPC
 
 class RPC_Responser(object):
     """[Connection thread with server RPC ]
