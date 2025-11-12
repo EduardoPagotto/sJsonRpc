@@ -5,7 +5,7 @@ Update on 20251110
 '''
 
 __json_rpc_version__ : str = '2.0'
-__version__ : str = "1.2.3"
+__version__ : str = "2.0.0"
 
 class ExceptionJsonRPC(Exception):
     def __init__(self, *args, **kwargs):

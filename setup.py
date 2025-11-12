@@ -20,7 +20,8 @@ PACKAGE = "sjsonrpc"
 # https://pypi.org/classifiers/
 
 def read(fname):
-    return codecs.open(os.path.join(os.path.dirname(__file__), fname)).read()
+    with open(os.path.join(os.path.dirname(__file__), fname), "r", encoding="utf-8") as f:
+        return f.read()
 
 setup(
     name="sjsonrpc",
@@ -43,10 +44,10 @@ setup(
         "Intended Audience :: Developers",
         "Topic :: File Formats :: JSON",
         "Topic :: Software Development :: Libraries",
-        "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent"
     ],
     install_requires=['setuptools',
                       'typing_extensions',
-                      'wheel'])
+                      'wheel',
+                      'aiologger'])
