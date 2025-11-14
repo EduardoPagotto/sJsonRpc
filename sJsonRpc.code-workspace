@@ -146,7 +146,7 @@
                 "args": []
             },
             {
-                "name": "Cient",
+                "name": "Client",
                 "type": "debugpy",
                 "request": "launch",
                 "program": "${workspaceFolder}/tests/client.py",

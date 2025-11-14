@@ -1,103 +1,67 @@
 #!/usr/bin/env python3
 '''
 Created on 20170119
-Update on 20251112
+Update on 20251114
 @author: Eduardo Pagotto
 '''
 
-import json
 import logging
-from typing import Any
-from urllib.parse import urlparse
+import time
 
-from zencomm import ProtocolCode, setup_queue_logging
-from zencomm.syn.protocol import Protocol
-from zencomm.syn.socket import socket_client
+from zencomm import setup_queue_logging
 
 import os
 import sys
 sys.path.append(os.path.join(os.getcwd(), '.'))
 
-from sjsonrpc.syn import ConnectionControl, ProxyObject
+from sjsonrpc.syn import RPC_Client
+
+URL = 'unix:///tmp/teste0.sock'
 
 logger_listern = setup_queue_logging('./log/client.log')
 logger = logging.getLogger('client')
 
-class ConnectionRemote(ConnectionControl):
-    def __init__(self, url):
-        super().__init__(url)
+def do_test(msg: str, client : RPC_Client):
 
-    def exec(self, input_rpc : dict, *args, **kargs) -> dict:
+    logger.info("client start.")
 
-        timeout = 60
-        url = self.getUrl()
-        parsed_url = urlparse(url)
+    for c in range(3):
+        val = client.call().teste(f"{msg}---{c}......")
+        logger.info(f"response {c}: {val}")
+        time.sleep(1)
 
-        result : dict = {}
+    logger.info("client stop.")
 
-        try:
-            soc = socket_client(parsed_url, timeout)
-            if soc:
-                p = Protocol(soc)
+def teste1():
+    try:
+        with RPC_Client(URL) as client:
+            do_test('SYNC TESTE1', client)
 
-                payload = json.dumps(input_rpc)
+    except Exception as exp:
+        logger.error(str(exp))
 
-                p.sendString(ProtocolCode.COMMAND, payload)
-                c, m = p.receiveString()
-                if c == ProtocolCode.RESULT:
-                    result = json.loads(m)
-                else:
-                    raise Exception(m)
+def teste2():
 
-                p.sendClose('bye')
+    try:
+        client = RPC_Client(URL)
+        client.connect()
 
-        except FileNotFoundError:
-            logger.error(f"Unix socket not found at {parsed_url.geturl()}")
+        do_test('SYNC TESTE2',client)
 
-        except ConnectionRefusedError:
-            logger.error(f"Connection to {parsed_url.geturl()} refused.")
+        client.disconect()
 
-        except ConnectionResetError:
-            logger.error(f"Client {parsed_url.geturl()} forcibly closed the connection.")
-
-        except BrokenPipeError as eb:
-            logger.error(f"Connection is dead: {str(eb)}")
-
-        except Exception as e:
-            logger.error(f"An unexpected error occurred: {str(e)}")
-
-        finally:
-            logger.info("client stop.")
-
-        return result
-
-class ClientRCP(object):
-    def __init__(self, addr) -> None:
-        self.comm = ConnectionRemote(addr)
-
-    def __rpc(self) -> Any:
-        return ProxyObject(self.comm)
-
-    def teste(self, nome : str) -> str:
-        return self.__rpc().teste(nome)
+    except Exception as exp:
+        logger.error(str(exp))
 
 
 def main():
+    teste1()
+    teste2()
 
+if __name__ == '__main__':
     try:
-
-        client = ClientRCP('unix:///tmp/teste0.sock')
-
-        val = client.teste("estuardo")
-        logger.info(f"Recebido {val}")
-
-
+        main()
     except Exception as exp:
         logger.exception('Falha %s', str(exp))
 
     logger.info('App desconectado')
-
-
-
-if __name__ == '__main__':
-    main()

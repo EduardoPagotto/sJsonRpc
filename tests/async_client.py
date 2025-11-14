@@ -21,29 +21,21 @@ URL = 'unix:///tmp/teste0.sock'
 logger_listern = setup_queue_logging('./log/async_client.log')
 logger = logging.getLogger('async_client')
 
-async def do_test(client : RPC_Client):
+async def do_test(msg: str, client : RPC_Client):
 
     logger.info("client start.")
 
-    val = await client.call().teste("teste1---123......")
-    logger.info(f"response: {val}")
-    await asyncio.sleep(5)
-
-    val = await client.call().teste("teste1---456......")
-    logger.info(f"response: {val}")
-    await asyncio.sleep(5)
-
-    val = await client.call().teste("teste1---789......")
-    logger.info(f"response: {val}")
-    await asyncio.sleep(5)
+    for c in range(3):
+        val = await client.call().teste(f"{msg}---{c}......")
+        logger.info(f"response {c}: {val}")
+        await asyncio.sleep(1)
 
     logger.info("client stop.")
 
 async def teste1():
     try:
         async with RPC_Client(URL) as client:
-
-            await do_test(client)
+            await do_test('TESTE1', client)
 
     except Exception as exp:
         logger.error(str(exp))
@@ -54,7 +46,7 @@ async def teste2():
         client = RPC_Client(URL)
         await client.connect()
 
-        await do_test(client)
+        await do_test('TESTE2',client)
 
         await client.disconect()
 

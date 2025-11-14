@@ -10,9 +10,9 @@ import logging
 from urllib.parse import urlparse
 
 from zencomm import ProtocolCode
-from zencomm.asy import Protocol, socket_client
+from zencomm.syn import Protocol, socket_client
 
-from sjsonrpc.asy import  ConnectionControl
+from sjsonrpc.syn import ConnectionControl
 
 from sjsonrpc.exceptjsonrpc import ExceptRPC
 
@@ -22,15 +22,15 @@ class ConnectionRemote(ConnectionControl):
         self.log = logging.getLogger(__name__)
         self.protocol = None
 
-    async def connect(self):
+    def connect(self):
 
         if self.protocol:
             return
 
         try:
             self.log.info(f"connect to {self.getUrl()}")
-            reader, writer = await socket_client(urlparse(self.getUrl()), 60)
-            self.protocol = Protocol(reader, writer, 30)
+            sock = socket_client(urlparse(self.getUrl()), 60)
+            self.protocol = Protocol(sock)
             return
 
         except FileNotFoundError:
@@ -44,15 +44,16 @@ class ConnectionRemote(ConnectionControl):
 
         raise ExceptRPC('fail RCP access comunication')
 
-    async def disconnect(self):
+    def disconnect(self):
         if self.protocol:
-            await self.protocol.sendClose('bye')
+            self.protocol.sendClose('bye')
             self.protocol = None
 
-    async def exec(self, input_rpc : dict, *args, **kargs) -> dict:
 
-        await self.protocol.sendString(ProtocolCode.COMMAND, json.dumps(input_rpc))
-        c, m = await self.protocol.receiveString()
+    def exec(self, input_rpc : dict, *args, **kargs) -> dict:
+
+        self.protocol.sendString(ProtocolCode.COMMAND, json.dumps(input_rpc))
+        c, m = self.protocol.receiveString()
         if c == ProtocolCode.RESULT:
             return json.loads(m)
         else:
