@@ -1,6 +1,6 @@
 '''
 Created on 20190823
-Update on 20251112
+Update on 20251114
 @author: Eduardo Pagotto
 '''
 
@@ -8,7 +8,7 @@ import threading
 import random
 
 from sjsonrpc import __json_rpc_version__ as json_rpc_version
-from sjsonrpc.exceptjsonrpc import ExceptionJsonRPC
+from sjsonrpc.exceptjsonrpc import ExceptRPC
 
 from .ConnectionControl import ConnectionControl
 
@@ -76,11 +76,11 @@ class RPC_Call(object):
         """
         if reg['id'] == self.serial:
             if 'error' in reg:
-                raise ExceptionJsonRPC(reg['error']['message'], reg['error']['code'])
+                raise ExceptRPC(reg['error']['message'], reg['error']['code'])
 
             return reg['result']
 
-        raise ExceptionJsonRPC(f'Parse error, id {reg["id"]} should be {self.serial}', -32700)
+        raise ExceptRPC(f'Parse error, id {reg["id"]} should be {self.serial}', -32700)
 
     def __call__(self, *args, **kargs) -> dict:
         """[Call RPC on connection and get result]

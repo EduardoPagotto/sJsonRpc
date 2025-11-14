@@ -1,11 +1,11 @@
 '''
 Created on 20190824
-Update on 20251112
+Update on 20251114
 @author: Eduardo Pagotto
 '''
 
 from sjsonrpc import __json_rpc_version__ as json_rpc_version
-from sjsonrpc.exceptjsonrpc import ExceptionJsonRPC
+from sjsonrpc.exceptjsonrpc import ExceptRPC
 
 class RPC_Responser(object):
     """[Connection thread with server RPC ]
@@ -34,7 +34,7 @@ class RPC_Responser(object):
         except TypeError as exp1:
             return {'jsonrpc': json_rpc_version, 'error': {'code': -32602, 'message': 'Invalid params: '+ str(exp1)}, 'id': serial}
 
-        except ExceptionJsonRPC as exp2:
+        except ExceptRPC as exp2:
             tot = len(exp2.args)
             if tot == 0:
                 return {'jsonrpc': json_rpc_version, 'error': {'code': -32000, 'message': 'server error: generic RPC exception'}, 'id': serial}
