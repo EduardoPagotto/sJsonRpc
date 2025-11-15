@@ -5,4 +5,4 @@ Update on 20251114
 '''
 
 __json_rpc_version__ : str = '2.0'
-__version__ : str = "2.0.1"
+__version__ : str = "2.0.2"
