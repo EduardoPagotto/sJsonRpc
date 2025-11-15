@@ -1,27 +1,9 @@
 # Simple Json RPC Wrapper (sJsonRpc)
 Just a simple Json RPC Python wrapper class
 
-## Client class
-New connections kind just overload "ConnectionControl.py" with any protocol/socket<p>
-In ./tests/ has a several examples using zencomm(simple binary socket protocol)
+Set of classes to wrapper json rpc in python sync and asyn
 
-## Server class
-New server just overload "RPC_Responser.py" using any kind of socket/protocol
-
-## Setup env
-```bash
-python3 -m venv .venv
-pip3 install -r requirements.txt
-pip3 install .
-
-```
-
-## Atention to test
-
-```bash
-└── tests
-    ├── async_client.py  # Async client using zencomm as socke comunication
-    ├── async_server.py  # Async server using zencomm as socke comunication
-    ├── client.py        # Client using zencomm as socke comunication
-    └── server.py        # Server using zencomm as socke comunication
-```
+Examples how to use:
+- [ZenRPC](https://github.com/EduardoPagotto/zenrpc): Json RPC binary protocol sync/async
+- [SSF](https://github.com/EduardoPagotto/SSF/tree/main): Json File share
+- [SSC](https://github.com/EduardoPagotto/SSC/tree/main): Simple stream-queues python (like apache-pulsar but very simple)
